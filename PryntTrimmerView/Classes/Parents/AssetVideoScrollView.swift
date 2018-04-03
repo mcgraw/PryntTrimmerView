@@ -14,7 +14,9 @@ class AssetVideoScrollView: UIScrollView {
     private var widthConstraint: NSLayoutConstraint?
 
     let contentView = UIView()
-    var maxDuration: Double = 15
+    var maxDuration: Double = 30
+    var thumbnailPadding: CGFloat = 2
+    
     private var generator: AVAssetImageGenerator?
 
     override init(frame: CGRect) {
@@ -98,17 +100,17 @@ class AssetVideoScrollView: UIScrollView {
             let thumbnailView = UIImageView(frame: CGRect.zero)
             thumbnailView.clipsToBounds = true
 
-            let viewEndX = CGFloat(index) * size.width + size.width
+            let viewEndX = CGFloat(index) * size.width + size.width + (thumbnailPadding * 2)
 
             if viewEndX > contentView.frame.width {
-                thumbnailView.frame.size = CGSize(width: size.width + (contentView.frame.width - viewEndX), height: size.height)
+                thumbnailView.frame.size = CGSize(width: size.width + (contentView.frame.width - viewEndX), height: size.height - (thumbnailPadding * 2))
                 thumbnailView.contentMode = .scaleAspectFill
             } else {
-                thumbnailView.frame.size = size
+                thumbnailView.frame.size =  CGSize(width: size.width, height: size.height - (thumbnailPadding * 4))
                 thumbnailView.contentMode = .scaleAspectFit
             }
 
-            thumbnailView.frame.origin = CGPoint(x: CGFloat(index) * size.width, y: 0)
+            thumbnailView.frame.origin = CGPoint(x: CGFloat(index) * (size.width + thumbnailPadding), y: thumbnailPadding * 2)
             thumbnailView.tag = index
             contentView.addSubview(thumbnailView)
         }
